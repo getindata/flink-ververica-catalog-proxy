@@ -1,0 +1,6 @@
+{
+  "code": "NOT_FOUND",
+  "description": "Database default2 does not exist in Catalog vvp.",
+  "cause": null,
+  "ok": false
+}
