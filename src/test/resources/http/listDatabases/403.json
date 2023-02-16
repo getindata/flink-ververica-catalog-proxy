@@ -1,0 +1,6 @@
+{
+  "timestamp": 1659609503667,
+  "status": 403,
+  "error": "Forbidden",
+  "path": "/catalog/v1beta2/namespaces/default2/catalogs/vvp:listDatabases"
+}
