@@ -1,0 +1,37 @@
+{
+  "tables": [
+    {
+      "name": "my_table",
+      "schema": {
+        "column": [
+          {
+            "name": "string_column",
+            "type": "VARCHAR(2147483647)",
+            "expression": ""
+          },
+          {
+            "name": "numeric_column",
+            "type": "DECIMAL(10, 0)",
+            "expression": ""
+          },
+          {
+            "name": "timestamp_column",
+            "type": "TIMESTAMP(3)",
+            "expression": ""
+          }
+        ],
+        "watermarkSpec": [
+          {
+            "timeColumn": "timestamp_column",
+            "watermarkExpression": "`timestamp_column` - INTERVAL '1' MINUTE",
+            "watermarkType": "TIMESTAMP(3)"
+          }
+        ]
+      },
+      "properties": {
+        "connector": "datagen"
+      },
+      "comment": ""
+    }
+  ]
+}

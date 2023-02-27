@@ -1,0 +1,11 @@
+{
+  "functions": [
+    {
+      "name": "AddOneUDF",
+      "className": "com.getindata.function.AddOneUDF",
+      "functionLanguage": "FUNCTION_LANGUAGE_JAVA",
+      "functionType": "FUNCTION_TYPE_FLINK",
+      "description": "This is a user-defined function"
+    }
+  ]
+}
