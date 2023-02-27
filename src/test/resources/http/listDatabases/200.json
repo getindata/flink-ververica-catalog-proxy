@@ -1,0 +1,9 @@
+{
+  "databases": [
+    {
+      "name": "default",
+      "properties": {},
+      "comment": "Default Database"
+    }
+  ]
+}

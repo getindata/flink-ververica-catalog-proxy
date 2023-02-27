@@ -1,0 +1,6 @@
+{
+  "timestamp": 1660039061271,
+  "status": 403,
+  "error": "Forbidden",
+  "path": "/catalog/v1beta2/namespaces/default2/catalogs/vvp:listFunctions"
+}

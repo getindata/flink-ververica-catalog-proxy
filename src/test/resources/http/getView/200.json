@@ -1,0 +1,19 @@
+{
+  "view": {
+    "name": "my_view",
+    "schema": {
+      "column": [
+        {
+          "name": "string_column",
+          "type": "VARCHAR(2147483647)",
+          "expression": ""
+        }
+      ],
+      "watermarkSpec": []
+    },
+    "properties": {},
+    "comment": "",
+    "query": "SELECT `string_column`\nFROM `vvp`.`default`.`my_table`",
+    "expandedQuery": "SELECT `my_table`.`string_column`\nFROM `vvp`.`default`.`my_table`"
+  }
+}
