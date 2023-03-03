@@ -1,5 +1,9 @@
 package com.getindata.flink.catalog;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.apache.flink.table.api.ValidationException;
 import org.apache.flink.table.factories.CatalogFactory.Context;
 import org.apache.flink.table.factories.FactoryUtil.DefaultCatalogContext;
@@ -9,12 +13,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-
 
 class VervericaCatalogFactoryTest {
+
+    private static Stream<? extends Arguments> provideArguments() {
+        return Stream.of(
+                Arguments.of(null, NullPointerException.class),
+                Arguments.of("", IllegalArgumentException.class),
+                Arguments.of("   ", IllegalArgumentException.class)
+        );
+    }
 
     @Test
     void testMissingUrl() {
@@ -57,14 +65,6 @@ class VervericaCatalogFactoryTest {
             Context context = new DefaultCatalogContext("name", map, null, null);
             new VervericaCatalogFactory().createCatalog(context);
         });
-    }
-
-    private static Stream<? extends Arguments> provideArguments() {
-        return Stream.of(
-                Arguments.of(null, NullPointerException.class),
-                Arguments.of("", IllegalArgumentException.class),
-                Arguments.of("   ", IllegalArgumentException.class)
-        );
     }
 
 }

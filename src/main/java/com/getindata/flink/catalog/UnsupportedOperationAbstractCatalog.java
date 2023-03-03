@@ -1,16 +1,16 @@
 package com.getindata.flink.catalog;
 
+import java.util.List;
+
 import org.apache.flink.table.catalog.*;
 import org.apache.flink.table.catalog.exceptions.*;
 import org.apache.flink.table.catalog.stats.CatalogColumnStatistics;
 import org.apache.flink.table.catalog.stats.CatalogTableStatistics;
 import org.apache.flink.table.expressions.Expression;
 
-import java.util.List;
-
 abstract class UnsupportedOperationAbstractCatalog extends AbstractCatalog {
 
-    public UnsupportedOperationAbstractCatalog(String name, String defaultDatabase) {
+    UnsupportedOperationAbstractCatalog(String name, String defaultDatabase) {
         super(name, defaultDatabase);
     }
 

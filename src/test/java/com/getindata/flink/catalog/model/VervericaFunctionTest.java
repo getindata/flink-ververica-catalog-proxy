@@ -1,10 +1,11 @@
 package com.getindata.flink.catalog.model;
 
-import com.getindata.ververica.client.model.Function;
-import com.getindata.ververica.client.model.Function.FunctionLanguageEnum;
 import org.apache.flink.table.catalog.FunctionLanguage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import com.getindata.ververica.client.model.Function;
+import com.getindata.ververica.client.model.Function.FunctionLanguageEnum;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

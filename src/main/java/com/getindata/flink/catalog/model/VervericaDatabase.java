@@ -1,12 +1,13 @@
 package com.getindata.flink.catalog.model;
 
-import com.getindata.ververica.client.model.Database;
-import lombok.AllArgsConstructor;
-import org.apache.flink.table.catalog.CatalogDatabase;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+
+import lombok.AllArgsConstructor;
+import org.apache.flink.table.catalog.CatalogDatabase;
+
+import com.getindata.ververica.client.model.Database;
 
 @AllArgsConstructor
 public class VervericaDatabase implements CatalogDatabase {

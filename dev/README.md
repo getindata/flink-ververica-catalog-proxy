@@ -30,7 +30,8 @@ import scala.*
 <blank line>
 import all other imports
 <blank line>
-import com.getindata.connectors.*
-import com.getindata.connectors.internal.*
+import com.getindata.*
+<blank line>
+import static all other imports
 ```
  

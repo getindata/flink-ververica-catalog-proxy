@@ -1,13 +1,13 @@
 package com.getindata.flink.catalog.httpclient;
 
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Properties;
+
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Properties;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;

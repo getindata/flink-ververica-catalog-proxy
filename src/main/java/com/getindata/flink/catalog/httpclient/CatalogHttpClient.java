@@ -1,8 +1,8 @@
 package com.getindata.flink.catalog.httpclient;
 
-import com.getindata.flink.catalog.VervericaCatalog;
-
 import java.util.Map;
+
+import com.getindata.flink.catalog.VervericaCatalog;
 
 
 /**
