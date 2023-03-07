@@ -28,3 +28,6 @@ jobs:
 
       - name: Build
         run: mvn $MAVEN_CLI_OPTS $JAVA_ADDITIONAL_OPTS compile
+        
+      - name: Tests
+        run: mvn $MAVEN_CLI_OPTS $JAVA_ADDITIONAL_OPTS test integration-test    
