@@ -220,6 +220,7 @@ under the License.
                             <failsOnError>true</failsOnError>
                             <failOnViolation>true</failOnViolation>
                             <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            <sourceDirectories>${project.build.sourceDirectory}</sourceDirectories>
                         </configuration>
                     </execution>
                 </executions>
