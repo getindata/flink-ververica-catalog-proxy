@@ -32,4 +32,4 @@ jobs:
           git config user.email github-actions@github.com
           git commit -am "Bump CHANGELOG for release ${{ steps.save_current_version.outputs.current_version }}"
           git checkout -b release/1.15-${{ steps.save_current_version.outputs.current_version }}
-          git push -u origin release/1.15${{ steps.save_current_version.outputs.current_version }}
+          git push -u origin release/1.15-${{ steps.save_current_version.outputs.current_version }}
