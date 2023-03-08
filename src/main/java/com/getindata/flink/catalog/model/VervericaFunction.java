@@ -1,12 +1,13 @@
 package com.getindata.flink.catalog.model;
 
-import com.getindata.ververica.client.model.Function;
-import com.getindata.ververica.client.model.Function.FunctionLanguageEnum;
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import org.apache.flink.table.catalog.CatalogFunction;
 import org.apache.flink.table.catalog.FunctionLanguage;
 
-import java.util.Optional;
+import com.getindata.ververica.client.model.Function;
+import com.getindata.ververica.client.model.Function.FunctionLanguageEnum;
 
 @AllArgsConstructor
 public class VervericaFunction implements CatalogFunction {

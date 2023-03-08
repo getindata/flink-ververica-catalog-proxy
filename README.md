@@ -1,5 +1,5 @@
 # flink-ververica-catalog-proxy
-Proxy to the internal Ververica Catalog. This class uses API exposed by Ververica to get tables, views, functions definitions.
+Proxy to the internal Ververica Catalog. Proxy implementation calls API exposed by Ververica to get tables, views, functions definitions.
 
 
 ## Usage

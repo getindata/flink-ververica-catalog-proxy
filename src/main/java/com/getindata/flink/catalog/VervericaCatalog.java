@@ -1,12 +1,13 @@
 package com.getindata.flink.catalog;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.getindata.flink.catalog.httpclient.CatalogHttpClient;
-import com.getindata.flink.catalog.httpclient.CatalogHttpClientResponse;
-import com.getindata.flink.catalog.model.VervericaDatabase;
-import com.getindata.flink.catalog.model.VervericaFunction;
-import com.getindata.ververica.client.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.table.api.Schema;
 import org.apache.flink.table.api.Schema.Builder;
@@ -19,11 +20,11 @@ import org.apache.flink.table.catalog.stats.CatalogColumnStatistics;
 import org.apache.flink.table.catalog.stats.CatalogTableStatistics;
 import org.apache.flink.util.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.getindata.flink.catalog.httpclient.CatalogHttpClient;
+import com.getindata.flink.catalog.httpclient.CatalogHttpClientResponse;
+import com.getindata.flink.catalog.model.VervericaDatabase;
+import com.getindata.flink.catalog.model.VervericaFunction;
+import com.getindata.ververica.client.model.*;
 
 import static org.apache.flink.util.Preconditions.checkArgument;
 
@@ -63,6 +64,40 @@ public class VervericaCatalog extends UnsupportedOperationAbstractCatalog {
         this.ververicaNamespace = ververicaNamespace;
         this.ververicaCatalog = ververicaCatalog;
         this.client = client;
+    }
+
+    private static ExceptionMessageMapper<DatabaseNotExistException> databaseNotExistsMapper(final String databaseName) {
+        return desc -> desc.indexOf("Database") == 0 ? Optional.of(new DatabaseNotExistException(desc, databaseName)) : Optional.empty();
+    }
+
+    private static Schema parseVvpSchema(VvpSchema vvpSchema) {
+        Builder schemaBuilder = Schema.newBuilder();
+
+        Optional.ofNullable(
+                vvpSchema.getColumn())
+                .orElse(Collections.emptyList())
+                .forEach(vvpColumn -> addColumnToSchema(schemaBuilder, vvpColumn));
+
+        Optional.ofNullable(
+                vvpSchema.getWatermarkSpec())
+                .orElse(Collections.emptyList())
+                .forEach(vvpWatermark -> schemaBuilder.watermark(vvpWatermark.getTimeColumn(), vvpWatermark.getWatermarkExpression()));
+
+        if (vvpSchema.getPrimaryKey() != null && vvpSchema.getPrimaryKey().getColumn() != null) {
+            schemaBuilder.primaryKey(vvpSchema.getPrimaryKey().getColumn());
+        }
+
+        return schemaBuilder.build();
+    }
+
+    private static void addColumnToSchema(Schema.Builder schemaBuilder, VvpColumn vvpColumn) {
+        if (!StringUtils.isNullOrWhitespaceOnly(vvpColumn.getExpression())) {
+            schemaBuilder.columnByExpression(vvpColumn.getName(), vvpColumn.getExpression());
+        } else if (vvpColumn.getMeta() != null) {
+            schemaBuilder.columnByMetadata(vvpColumn.getName(), vvpColumn.getType(), vvpColumn.getMeta().getName(), vvpColumn.getMeta().isVirtual());
+        } else {
+            schemaBuilder.column(vvpColumn.getName(), vvpColumn.getType());
+        }
     }
 
     @Override
@@ -225,10 +260,6 @@ public class VervericaCatalog extends UnsupportedOperationAbstractCatalog {
         throw new CatalogException("Status code: " + response.getStatusCode());
     }
 
-    private static ExceptionMessageMapper<DatabaseNotExistException> databaseNotExistsMapper(final String databaseName) {
-        return desc -> desc.indexOf("Database") == 0 ? Optional.of(new DatabaseNotExistException(desc, databaseName)) : Optional.empty();
-    }
-
     private String getBasePath() {
         return String.format("%s/catalog/v1beta2/namespaces/%s/catalogs/%s", ververicaUrl, ververicaNamespace, ververicaCatalog);
     }
@@ -238,36 +269,6 @@ public class VervericaCatalog extends UnsupportedOperationAbstractCatalog {
             return listViews(tablePath.getDatabaseName()).contains(tablePath.getObjectName());
         } catch (DatabaseNotExistException e) {
             return false;
-        }
-    }
-
-    private static Schema parseVvpSchema(VvpSchema vvpSchema) {
-        Builder schemaBuilder = Schema.newBuilder();
-
-        Optional.ofNullable(
-                vvpSchema.getColumn())
-                .orElse(Collections.emptyList())
-                .forEach(vvpColumn -> addColumnToSchema(schemaBuilder, vvpColumn));
-
-        Optional.ofNullable(
-                vvpSchema.getWatermarkSpec())
-                .orElse(Collections.emptyList())
-                .forEach(vvpWatermark -> schemaBuilder.watermark(vvpWatermark.getTimeColumn(), vvpWatermark.getWatermarkExpression()));
-
-        if (vvpSchema.getPrimaryKey() != null && vvpSchema.getPrimaryKey().getColumn() != null) {
-            schemaBuilder.primaryKey(vvpSchema.getPrimaryKey().getColumn());
-        }
-
-        return schemaBuilder.build();
-    }
-
-    private static void addColumnToSchema(Schema.Builder schemaBuilder, VvpColumn vvpColumn) {
-        if (!StringUtils.isNullOrWhitespaceOnly(vvpColumn.getExpression())) {
-            schemaBuilder.columnByExpression(vvpColumn.getName(), vvpColumn.getExpression());
-        } else if (vvpColumn.getMeta() != null) {
-            schemaBuilder.columnByMetadata(vvpColumn.getName(), vvpColumn.getType(), vvpColumn.getMeta().getName(), vvpColumn.getMeta().isVirtual());
-        } else {
-            schemaBuilder.column(vvpColumn.getName(), vvpColumn.getType());
         }
     }
 

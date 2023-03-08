@@ -1,15 +1,16 @@
 package com.getindata.flink.catalog;
 
-import com.getindata.flink.catalog.httpclient.JavaNetCatalogHttpClient;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.table.catalog.Catalog;
 import org.apache.flink.table.factories.CatalogFactory;
 import org.apache.flink.table.factories.FactoryUtil;
 
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import com.getindata.flink.catalog.httpclient.JavaNetCatalogHttpClient;
 
 import static com.getindata.flink.catalog.VervericaCatalogOptions.*;
 
