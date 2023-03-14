@@ -22,7 +22,7 @@ under the License.
 
     <groupId>com.getindata</groupId>
     <artifactId>flink-ververica-catalog-proxy-1.15</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <packaging>jar</packaging>
 
     <name>flink-ververica-catalog-proxy</name>
@@ -323,6 +323,15 @@ under the License.
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
 
                     <plugin>
