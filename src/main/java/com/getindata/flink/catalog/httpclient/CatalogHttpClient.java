@@ -15,7 +15,7 @@ public interface CatalogHttpClient {
      * @param url    Base URL (Ververica URL + path)
      * @param action Ververica API action
      * @param params A map that represents query parameters. The map key represents a parameter's name and map value represents parameter's value.
-     * @return Response with status code & body
+     * @return Response with status code and body
      */
     CatalogHttpClientResponse send(String url, String action, Map<String, String> params);
 }
