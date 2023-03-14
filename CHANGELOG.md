@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.0.4] - 2023-03-14
+
 ## [0.0.3] - 2023-03-14
 
 ## [0.0.2] - 2023-03-13
@@ -12,7 +14,9 @@
 
 -   Flink ververica catalog proxy
 
-[Unreleased]: https://github.com/getindata/flink-ververica-catalog-proxy/compare/0.0.3...HEAD
+[Unreleased]: https://github.com/getindata/flink-ververica-catalog-proxy/compare/0.0.4...HEAD
+
+[0.0.4]: https://github.com/getindata/flink-ververica-catalog-proxy/compare/0.0.3...0.0.4
 
 [0.0.3]: https://github.com/getindata/flink-ververica-catalog-proxy/compare/0.0.2...0.0.3
 
