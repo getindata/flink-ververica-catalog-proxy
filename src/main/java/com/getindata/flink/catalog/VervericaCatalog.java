@@ -254,7 +254,7 @@ public class VervericaCatalog extends UnsupportedOperationAbstractCatalog {
                     throw new CatalogException(description);
             }
         } catch (JsonProcessingException e) {
-            throw new CatalogException("Problem with parsing response body");
+            throw new CatalogException("Problem with parsing response body", e);
         }
 
         throw new CatalogException("Status code: " + response.getStatusCode());

@@ -11,6 +11,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
@@ -21,12 +22,14 @@ import org.apache.http.message.BasicNameValuePair;
  * This implementation uses Java's 11 Http Client and supports only HTTP traffic (not HTTPS).
  */
 @Slf4j
+@AllArgsConstructor
 public final class JavaNetCatalogHttpClient implements CatalogHttpClient {
 
     private final HttpClient httpClient;
 
     private final String[] headersAndValues;
 
+    // TODO throw out
     public JavaNetCatalogHttpClient(Properties properties) {
         this.httpClient = HttpClient.newBuilder()
                 .followRedirects(HttpClient.Redirect.NORMAL)
