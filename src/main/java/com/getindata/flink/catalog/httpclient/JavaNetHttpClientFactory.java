@@ -23,6 +23,8 @@ import com.getindata.flink.catalog.httpclient.security.SelfSignedTrustManager;
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class JavaNetHttpClientFactory {
 
+    public static final String PROP_DELIM = ",";
+
     /**
      * Creates Java's {@link JavaNetCatalogHttpClient} instance that will be using default, JVM shared {@link
      * java.util.concurrent.ForkJoinPool} for async calls.
@@ -42,7 +44,7 @@ public class JavaNetHttpClientFactory {
 
         String[] headers = options
                 .getOptional(VervericaCatalogOptions.HTTP_PROXY_HEADERS).orElse("")
-                .split(HttpConfigConstants.PROP_DELIM);
+                .split(PROP_DELIM);
 
         return new JavaNetCatalogHttpClient(httpClient, headers);
     }
@@ -52,21 +54,21 @@ public class JavaNetHttpClientFactory {
      * <ul>
      * <li>{@link VervericaCatalogOptions#HTTP_ALLOW_SELF_SIGNED}</li>
      * <li>{@link VervericaCatalogOptions#HTTP_SERVER_TRUSTED_CERT}</li>
-     * <li>{@link HttpConfigConstants#PROP_DELIM}</li>
+     * <li>{@link #PROP_DELIM}</li>
      * </ul>
      *
      * @param options properties used to build {@link SSLContext}
      * @return new {@link SSLContext} instance.
      */
     private static SSLContext getSslContext(ReadableConfig options) {
-        SecurityContext securityContext = createSecurityContext(options);
+        SecurityContext securityContext = SecurityContext.create();
 
         boolean selfSignedCert =
                 options.getOptional(VervericaCatalogOptions.HTTP_ALLOW_SELF_SIGNED).orElse(false);
 
         String[] serverTrustedCerts = options
                 .getOptional(VervericaCatalogOptions.HTTP_SERVER_TRUSTED_CERT).orElse("")
-                .split(HttpConfigConstants.PROP_DELIM);
+                .split(PROP_DELIM);
 
         if (serverTrustedCerts.length > 0) {
             for (String cert : serverTrustedCerts) {
@@ -104,31 +106,6 @@ public class JavaNetHttpClientFactory {
             selfSignedManagers.add(new SelfSignedTrustManager((X509TrustManager) trustManager));
         }
         return selfSignedManagers;
-    }
-
-    /**
-     * Creates a {@link SecurityContext} with empty {@link java.security.KeyStore} or loaded from
-     * file.
-     *
-     * @param options Properties for creating {@link SecurityContext}
-     * @return new {@link SecurityContext} instance.
-     */
-    private static SecurityContext createSecurityContext(ReadableConfig options) {
-
-        String keyStorePath =
-                options.getOptional(VervericaCatalogOptions.HTTP_KEY_STORE_PATH).orElse("");
-
-        if (StringUtils.isNullOrWhitespaceOnly(keyStorePath)) {
-            return SecurityContext.create();
-        } else {
-            char[] storePassword =
-                    options.getOptional(VervericaCatalogOptions.HTTP_KEY_STORE_PASSWORD).orElse("")
-                            .toCharArray();
-            if (storePassword.length == 0) {
-                throw new RuntimeException("Missing password for provided KeyStore");
-            }
-            return SecurityContext.createFromKeyStore(keyStorePath, storePassword);
-        }
     }
 
 }
