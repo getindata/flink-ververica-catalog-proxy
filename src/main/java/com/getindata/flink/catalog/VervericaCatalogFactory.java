@@ -49,10 +49,6 @@ public class VervericaCatalogFactory implements CatalogFactory {
         options.add(HTTP_PROXY_HEADERS);
         options.add(HTTP_ALLOW_SELF_SIGNED);
         options.add(HTTP_SERVER_TRUSTED_CERT);
-        options.add(HTTP_KEY_STORE_PATH);
-        options.add(HTTP_KEY_STORE_PASSWORD);
-        options.add(HTTP_CLIENT_CERT);
-        options.add(HTTP_CLIENT_PRIVATE_KEY);
         return options;
     }
 }

@@ -36,7 +36,7 @@ class VervericaCatalogFactoryTest {
     @MethodSource("provideArguments")
     void testNullUrl(String url, Class<NullPointerException> exceptionClass) {
         Map<String, String> map = new HashMap<>();
-        map.put("vvp-url", url);
+        map.put("gid.vvp.proxy.url", url);
         Assertions.assertThrows(exceptionClass, () -> {
             Context context = new DefaultCatalogContext("name", map, null, null);
             new VervericaCatalogFactory().createCatalog(context);
@@ -47,8 +47,8 @@ class VervericaCatalogFactoryTest {
     @MethodSource("provideArguments")
     void testNullCatalog(String catalog, Class<NullPointerException> exceptionClass) {
         Map<String, String> map = new HashMap<>();
-        map.put("vvp-url", "url");
-        map.put("vvp-catalog", catalog);
+        map.put("gid.vvp.proxy.url", "url");
+        map.put("gid.vvp.proxy.catalog", catalog);
         Assertions.assertThrows(exceptionClass, () -> {
             Context context = new DefaultCatalogContext("name", map, null, null);
             new VervericaCatalogFactory().createCatalog(context);
@@ -59,8 +59,8 @@ class VervericaCatalogFactoryTest {
     @MethodSource("provideArguments")
     void testNullNamespace(String namespace, Class<NullPointerException> exceptionClass) {
         Map<String, String> map = new HashMap<>();
-        map.put("vvp-url", "url");
-        map.put("vvp-namespace", namespace);
+        map.put("gid.vvp.proxy.url", "url");
+        map.put("gid.vvp.proxy.namespace", namespace);
         Assertions.assertThrows(exceptionClass, () -> {
             Context context = new DefaultCatalogContext("name", map, null, null);
             new VervericaCatalogFactory().createCatalog(context);
