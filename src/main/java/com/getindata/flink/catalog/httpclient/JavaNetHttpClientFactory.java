@@ -4,6 +4,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -35,18 +36,23 @@ public class JavaNetHttpClientFactory {
      */
     public static JavaNetCatalogHttpClient createClient(ReadableConfig options) {
 
-        SSLContext sslContext = getSslContext(options);
-
-        HttpClient httpClient = HttpClient.newBuilder()
-                .followRedirects(Redirect.NORMAL)
-                .sslContext(sslContext)
-                .build();
+        HttpClient httpClient = buildHttpClient(options);
 
         String[] headers = options
-                .getOptional(VervericaCatalogOptions.HTTP_PROXY_HEADERS).orElse("")
-                .split(PROP_DELIM);
+                .getOptional(VervericaCatalogOptions.HTTP_PROXY_HEADERS)
+                .map(headerString -> headerString.split(PROP_DELIM))
+                .orElse(new String[]{});
 
         return new JavaNetCatalogHttpClient(httpClient, headers);
+    }
+
+    private static HttpClient buildHttpClient(ReadableConfig options) {
+        HttpClient.Builder builder = HttpClient.newBuilder()
+                .followRedirects(Redirect.NORMAL);
+
+        getSslContext(options).ifPresent(builder::sslContext);
+
+        return builder.build();
     }
 
     /**
@@ -60,27 +66,31 @@ public class JavaNetHttpClientFactory {
      * @param options properties used to build {@link SSLContext}
      * @return new {@link SSLContext} instance.
      */
-    private static SSLContext getSslContext(ReadableConfig options) {
+    private static Optional<SSLContext> getSslContext(ReadableConfig options) {
+        String[] serverTrustedCerts = options
+                .getOptional(VervericaCatalogOptions.HTTP_SERVER_TRUSTED_CERT)
+                .map(headerString -> headerString.split(PROP_DELIM))
+                .orElse(new String[]{});
+
+        if (serverTrustedCerts.length <= 0) {
+            return Optional.empty();
+        }
+
         SecurityContext securityContext = SecurityContext.create();
+
+        for (String cert : serverTrustedCerts) {
+            if (!StringUtils.isNullOrWhitespaceOnly(cert)) {
+                securityContext.addCertToTrustStore(cert);
+            }
+        }
 
         boolean selfSignedCert =
                 options.getOptional(VervericaCatalogOptions.HTTP_ALLOW_SELF_SIGNED).orElse(false);
 
-        String[] serverTrustedCerts = options
-                .getOptional(VervericaCatalogOptions.HTTP_SERVER_TRUSTED_CERT).orElse("")
-                .split(PROP_DELIM);
-
-        if (serverTrustedCerts.length > 0) {
-            for (String cert : serverTrustedCerts) {
-                if (!StringUtils.isNullOrWhitespaceOnly(cert)) {
-                    securityContext.addCertToTrustStore(cert);
-                }
-            }
-        }
 
         // NOTE TrustManagers must be created AFTER adding all certificates to KeyStore.
         TrustManager[] trustManagers = getTrustedManagers(securityContext, selfSignedCert);
-        return securityContext.getSslContext(trustManagers);
+        return Optional.of(securityContext.getSslContext(trustManagers));
     }
 
     private static TrustManager[] getTrustedManagers(

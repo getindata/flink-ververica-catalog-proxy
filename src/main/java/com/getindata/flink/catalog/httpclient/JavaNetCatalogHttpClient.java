@@ -7,9 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,22 +21,11 @@ import org.apache.http.message.BasicNameValuePair;
  */
 @Slf4j
 @AllArgsConstructor
-public final class JavaNetCatalogHttpClient implements CatalogHttpClient {
+final class JavaNetCatalogHttpClient implements CatalogHttpClient {
 
     private final HttpClient httpClient;
 
     private final String[] headersAndValues;
-
-    // TODO throw out
-    public JavaNetCatalogHttpClient(Properties properties) {
-        this.httpClient = HttpClient.newBuilder()
-                .followRedirects(HttpClient.Redirect.NORMAL)
-                .build();
-
-        this.headersAndValues = properties.entrySet().stream()
-                .flatMap(property -> Stream.of(property.getKey(), property.getValue()))
-                .toArray(String[]::new);
-    }
 
     @Override
     public CatalogHttpClientResponse send(String url, String action, Map<String, String> params) {
