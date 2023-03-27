@@ -1,10 +1,9 @@
 package com.getindata.flink.catalog.httpclient;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import org.apache.flink.configuration.Configuration;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -42,9 +41,9 @@ class JavaNetCatalogHttpClientTest {
                                 .withStatus(200)
                                 .withBody(body)));
 
-        var vvpProperties = new Properties();
-        vvpProperties.put("Content-Type", contentTypeHeader);
-        JavaNetCatalogHttpClient client = new JavaNetCatalogHttpClient(vvpProperties);
+        Map<String, String> vvpProperties = new HashMap<>();
+        vvpProperties.put("gid.vvp.proxy.headers", "Content-Type," + contentTypeHeader);
+        JavaNetCatalogHttpClient client = JavaNetHttpClientFactory.createClient(Configuration.fromMap(vvpProperties));
 
         var result = client.send(wireMockServer.baseUrl() + "/base/path", "listDatabases", Collections.emptyMap());
 
