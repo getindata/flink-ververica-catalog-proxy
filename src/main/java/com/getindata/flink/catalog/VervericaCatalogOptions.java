@@ -28,7 +28,7 @@ public class VervericaCatalogOptions {
     public static final String ALLOW_SELF_SIGNED = GID_PROXY + "security.cert.server.allowSelfSigned";
 
     public static final String SERVER_TRUSTED_CERT = GID_PROXY + "security.cert.server";
-    
+
     /**
      * Ververica URL
      */
@@ -61,7 +61,8 @@ public class VervericaCatalogOptions {
             ConfigOptions.key(HEADERS)
                     .stringType()
                     .noDefaultValue()
-                    .withDescription("Headers for http(s) call to ververica. Arrays of key and values using '" + JavaNetHttpClientFactory.PROP_DELIM + "' as delimiter");
+                    .withDescription("Headers for http(s) call to ververica. Arrays of key and values using '"
+                            + JavaNetHttpClientFactory.PROP_DELIM + "' as delimiter");
 
     public static final ConfigOption<Boolean> HTTP_ALLOW_SELF_SIGNED =
             ConfigOptions.key(ALLOW_SELF_SIGNED)

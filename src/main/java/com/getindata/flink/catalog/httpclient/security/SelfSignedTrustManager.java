@@ -23,12 +23,12 @@ public class SelfSignedTrustManager extends X509ExtendedTrustManager {
     }
 
     public void checkClientTrusted(X509Certificate[] chain, String s, Socket socket)
-        throws CertificateException {
+            throws CertificateException {
         this.delegate.checkClientTrusted(chain, s);
     }
 
     public void checkClientTrusted(X509Certificate[] chain, String s, SSLEngine sslEngine)
-        throws CertificateException {
+            throws CertificateException {
         this.delegate.checkClientTrusted(chain, s);
     }
 
@@ -37,12 +37,12 @@ public class SelfSignedTrustManager extends X509ExtendedTrustManager {
     }
 
     public void checkServerTrusted(X509Certificate[] chain, String s, Socket socket)
-        throws CertificateException {
+            throws CertificateException {
         log.info("Allowing self signed server certificates.");
     }
 
     public void checkServerTrusted(X509Certificate[] chain, String s, SSLEngine sslEngine)
-        throws CertificateException {
+            throws CertificateException {
         log.info("Allowing self signed server certificates.");
     }
 
