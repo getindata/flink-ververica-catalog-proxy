@@ -21,7 +21,7 @@ under the License.
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.getindata</groupId>
-    <artifactId>flink-ververica-catalog-proxy</artifactId>
+    <artifactId>flink-ververica-catalog-proxy-1.16</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
@@ -65,7 +65,7 @@ under the License.
     </distributionManagement>
 
     <properties>
-        <flink.version>1.15.0</flink.version>
+        <flink.version>1.16.0</flink.version>
         <java.version>11</java.version>
         <jackson.version>2.13.3</jackson.version>
         <swagger.version>1.6.9</swagger.version>
