@@ -31,28 +31,41 @@ jobs:
           echo "INPUT_VERSION_PART: ${{ github.event.inputs.version_part }}"
           python -c "if '${{ github.event.inputs.version_part }}' not in ['Patch', 'Minor', 'Major']:   raise ValueError(\"'${{ github.event.inputs.version_part }}' must be one of ['Patch', 'Minor', 'Major'])\")"
 
-      - name: Save current version
-        id: save_current_version
+      - name: Save new version
+        id: save_new_version
         run: |
+          mvn validate -D 'bump${{ github.event.inputs.version_part }}' -DgenerateBackupPoms=false
           mvn versions:set -DremoveSnapshot -DgenerateBackupPoms=false
-          echo "::set-output name=current_version::$(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)"
+          echo "::set-output name=new_version::$(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
-      - name: Update the CHANGELOG according to 'Keep a Changelog' guidelines
-        uses: thomaseizinger/keep-a-changelog-new-release@v1
-        with:
-          version: ${{ steps.save_current_version.outputs.current_version }}
-
-      - name: Create a new release branch
+      - name: Commit new release version 
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit -am "Bump CHANGELOG for release ${{ steps.save_current_version.outputs.current_version }}"
-          git checkout -b release/${{ steps.save_current_version.outputs.current_version }}
-          git push -u origin release/${{ steps.save_current_version.outputs.current_version }}
+          git commit -am "Bump version for release 1.16-${{ steps.save_new_version.outputs.new_version }}"
+          
+      - name: Update the CHANGELOG according to 'Keep a Changelog' guidelines
+        uses: thomaseizinger/keep-a-changelog-new-release@v1
+        with:
+          version: ${{ steps.save_new_version.outputs.new_version }}
+
+      - name: Create a new release branch
+        run: |
+          git commit -am "Bump CHANGELOG for release 1.16-${{ steps.save_new_version.outputs.new_version }}"
+          git checkout -b release/1.16-${{ steps.save_new_version.outputs.new_version }}
+          git push -u origin release/1.16-${{ steps.save_new_version.outputs.new_version }}
 
       - name: Bump development version
         run: |
-          git checkout main
-          mvn validate -D 'bump${{ github.event.inputs.version_part }}' -DgenerateBackupPoms=false
-          git commit -am "Bump development version to $(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)"
-          git push origin main
+          git checkout -b bump-version-after-1.16-${{ steps.save_new_version.outputs.new_version }}
+          git push -u origin bump-version-after-1.16-${{ steps.save_new_version.outputs.new_version }}
+
+      - name: Open a PR to bump development version to main
+        id: open_pr
+        uses: vsoch/pull-request-action@1.0.12
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST_BRANCH: main
+          PULL_REQUEST_FROM_BRANCH: bump-version-after-1.16-${{ steps.save_new_version.outputs.new_version }}
+          PULL_REQUEST_TITLE: "Bump development version after release of 1.16-${{ steps.save_new_version.outputs.new_version }}"
+          PULL_REQUEST_BODY: "Bump SNAPSHOT version and CHANGELOG for subsequent development."

@@ -1,10 +1,13 @@
 package com.getindata.flink.catalog.model;
 
+import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.flink.table.catalog.CatalogFunction;
 import org.apache.flink.table.catalog.FunctionLanguage;
+import org.apache.flink.table.resource.ResourceUri;
 
 import com.getindata.ververica.client.model.Function;
 import com.getindata.ververica.client.model.Function.FunctionLanguageEnum;
@@ -62,5 +65,10 @@ public class VervericaFunction implements CatalogFunction {
                 return FunctionLanguage.PYTHON;
         }
         throw new UnsupportedVervericaLanguageException(String.format("Unsupported language: %s", languageEnum.toString()));
+    }
+
+    @Override
+    public List<ResourceUri> getFunctionResources() {
+        return Lists.newArrayList();
     }
 }
