@@ -5,11 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import org.apache.commons.io.IOUtils;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.table.catalog.CatalogBaseTable.TableKind;
 import org.apache.flink.table.catalog.FunctionLanguage;
 import org.apache.flink.table.catalog.ObjectPath;
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.getindata.flink.catalog.httpclient.JavaNetCatalogHttpClient;
+import com.getindata.flink.catalog.httpclient.JavaNetHttpClientFactory;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +39,7 @@ class VervericaCatalogTest {
         wireMockServer = new WireMockServer();
         wireMockServer.start();
         ververicaCatalog = new VervericaCatalog("vvp", wireMockServer.baseUrl(), "default", "vvp",
-                new JavaNetCatalogHttpClient(new Properties()));
+                JavaNetHttpClientFactory.createClient(new Configuration()));
         setupStubs();
     }
 
@@ -116,9 +116,9 @@ class VervericaCatalogTest {
     @Test
     void shouldThrowExceptionWhenNamespaceOrCatalogInvalid() {
         var vvpCatalog1 = new VervericaCatalog("vvp", wireMockServer.baseUrl(), "default2", "vvp",
-                new JavaNetCatalogHttpClient(new Properties()));
+                JavaNetHttpClientFactory.createClient(new Configuration()));
         var vvpCatalog2 = new VervericaCatalog("vvp", wireMockServer.baseUrl(), "default", "vvp2",
-                new JavaNetCatalogHttpClient(new Properties()));
+                JavaNetHttpClientFactory.createClient(new Configuration()));
 
         assertThrows(CatalogException.class, () -> {
             vvpCatalog1.listDatabases();
@@ -212,9 +212,9 @@ class VervericaCatalogTest {
     @Test
     void shouldThrowExceptionWhenFunctionNamespaceOrCatalogInvalid() {
         var vvpCatalog1 = new VervericaCatalog("vvp", wireMockServer.baseUrl(), "default2", "vvp",
-                new JavaNetCatalogHttpClient(new Properties()));
+                JavaNetHttpClientFactory.createClient(new Configuration()));
         var vvpCatalog2 = new VervericaCatalog("vvp", wireMockServer.baseUrl(), "default", "vvp2",
-                new JavaNetCatalogHttpClient(new Properties()));
+                JavaNetHttpClientFactory.createClient(new Configuration()));
 
         assertThrows(CatalogException.class, () -> {
             vvpCatalog1.listFunctions("default");

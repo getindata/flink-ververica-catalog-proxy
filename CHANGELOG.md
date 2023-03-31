@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+-   Support for https connection and vvp auth token 
+
 ## [0.0.4] - 2023-03-14
 
 ## [0.0.3] - 2023-03-14
