@@ -27,4 +27,7 @@ jobs:
         run: mvn $MAVEN_CLI_OPTS $JAVA_ADDITIONAL_OPTS compile
         
       - name: Tests
-        run: mvn $MAVEN_CLI_OPTS $JAVA_ADDITIONAL_OPTS test integration-test    
+        run: mvn $MAVEN_CLI_OPTS $JAVA_ADDITIONAL_OPTS test integration-test
+
+      - name: Test JavaDoc
+        run: mvn $MAVEN_CLI_OPTS $JAVA_ADDITIONAL_OPTS javadoc:javadoc
