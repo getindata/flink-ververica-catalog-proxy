@@ -22,7 +22,7 @@ under the License.
 
     <groupId>com.getindata</groupId>
     <artifactId>flink-ververica-catalog-proxy-1.16</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <packaging>jar</packaging>
 
     <name>flink-ververica-catalog-proxy</name>
