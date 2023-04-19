@@ -50,6 +50,7 @@ class JavaNetCatalogHttpClientTest {
 
         Map<String, String> vvpProperties = new HashMap<>();
         vvpProperties.put(VervericaCatalogOptions.HEADERS, "Content-Type," + contentTypeHeader);
+        vvpProperties.put(VervericaCatalogOptions.FOLLOW_REDIRECTS, "ALWAYS");
 
         invokeAndAssertResult(endpoint, body, vvpProperties);
     }

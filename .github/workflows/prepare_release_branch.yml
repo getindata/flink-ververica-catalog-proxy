@@ -55,6 +55,26 @@ jobs:
           git checkout -b release/1.16-${{ steps.save_new_version.outputs.new_version }}
           git push -u origin release/1.16-${{ steps.save_new_version.outputs.new_version }}
 
+      - name: Create Release # https://github.com/actions/create-release
+        id: create_release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: 1.16-v${{ steps.set_package_version.outputs.new_version }}
+          release_name: Release 1.16-v${{ steps.set_package_version.outputs.new_version }}
+          draft: false
+          prerelease: false
+
+      - name: Rollback Release in case of run failure
+        if: failure() && steps.create_release.outputs.id != ''
+        uses: author/action-rollback@stable
+        with:
+          # Using a known release ID
+          release_id: ${{ steps.create_release.outputs.id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Bump development version
         run: |
           git checkout -b bump-version-after-1.16-${{ steps.save_new_version.outputs.new_version }}

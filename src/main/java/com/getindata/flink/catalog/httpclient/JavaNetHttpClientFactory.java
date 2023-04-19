@@ -1,7 +1,6 @@
 package com.getindata.flink.catalog.httpclient;
 
 import java.net.http.HttpClient;
-import java.net.http.HttpClient.Redirect;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +47,7 @@ public class JavaNetHttpClientFactory {
 
     private static HttpClient buildHttpClient(ReadableConfig options) {
         HttpClient.Builder builder = HttpClient.newBuilder()
-                .followRedirects(Redirect.NORMAL);
+                .followRedirects(options.get(VervericaCatalogOptions.HTTP_FOLLOW_REDIRECTS));
 
         getSslContext(options).ifPresent(builder::sslContext);
 

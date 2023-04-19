@@ -24,8 +24,8 @@ CREATE CATALOG vvp
 WITH (
   'type' = 'ververica',
   'gid.vvp.proxy.url' = 'https://localhost:8080',
-  'gid.vvp.proxy.http.headers' = 'Authorization,Bearer <token>',
-  'gid.vvp.proxy.http.security.cert.server' = '/home/user/vvp.crt'
+  'gid.vvp.proxy.headers' = 'Authorization,Bearer <token>',
+  'gid.vvp.proxy.security.cert.server' = '/home/user/vvp.crt'
 );
 
 USE CATALOG vvp;

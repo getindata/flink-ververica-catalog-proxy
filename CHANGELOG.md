@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+-   Configurable follow redirects option
+
 ## [0.1.0] - 2023-03-31
 
 ### Added
