@@ -257,7 +257,8 @@ public class VervericaCatalog extends UnsupportedOperationAbstractCatalog {
             throw new CatalogException("Problem with parsing response body", e);
         }
 
-        throw new CatalogException("Status code: " + response.getStatusCode());
+        throw new CatalogException(String.format("Status code: %s. Response body: %s", response.getStatusCode(),
+                response.getBody()));
     }
 
     private String getBasePath() {

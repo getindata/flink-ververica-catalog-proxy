@@ -1,5 +1,7 @@
 package com.getindata.flink.catalog;
 
+import java.net.http.HttpClient;
+
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigOptions;
 
@@ -22,6 +24,8 @@ public class VervericaCatalogOptions {
     public static final String CATALOG = GID_PROXY + "catalog";
 
     public static final String HEADERS = GID_PROXY + "headers";
+
+    public static final String FOLLOW_REDIRECTS = GID_PROXY + "followRedirects";
 
     /* -------------- HTTPS security settings -------------- */
 
@@ -75,4 +79,10 @@ public class VervericaCatalogOptions {
                     .stringType()
                     .noDefaultValue()
                     .withDescription("Path for server .crt file.");
+
+    public static final ConfigOption<HttpClient.Redirect> HTTP_FOLLOW_REDIRECTS =
+            ConfigOptions.key(FOLLOW_REDIRECTS)
+                    .enumType(HttpClient.Redirect.class)
+                    .defaultValue(HttpClient.Redirect.NORMAL)
+                    .withDescription("Follow redirects option for http client.");
 }
